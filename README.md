@@ -15,3 +15,8 @@ npm install supertest chai mocha csv-writer dotenv --save-dev
 
 # To Test
 mocha testFileName.js --require dotenv/config
+
+
+
+npm install supertest chai mocha csv-writer dotenv mochawesome --save-dev
+mocha testFileName.js --require dotenv/config --reporter mochawesome --reporter-options reportDir=output/mochawesome-report,reportFilename=index
