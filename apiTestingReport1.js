@@ -25,10 +25,9 @@ describe('POST /api/users', () => {
           .end((err, res) => {
             if (err) return done(err);
             // assertions for successful response
-            console.log(res.body); // log response in console
             expect(res.body).to.have.property('id');
             expect(res.body.name).to.equal(data.name);
-            expect(res.body.email).to.equal(data.email);
+            expect(res.body.job).to.equal(data.job);
           });
       })
       .on('end', () => {
@@ -36,3 +35,4 @@ describe('POST /api/users', () => {
       });
   });
 });
+

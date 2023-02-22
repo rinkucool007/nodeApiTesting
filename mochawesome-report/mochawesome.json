@@ -2,14 +2,14 @@
   "stats": {
     "suites": 1,
     "tests": 1,
-    "passes": 0,
+    "passes": 1,
     "pending": 0,
-    "failures": 1,
-    "start": "2023-02-22T01:08:52.565Z",
-    "end": "2023-02-22T01:08:52.654Z",
-    "duration": 89,
+    "failures": 0,
+    "start": "2023-02-22T14:02:02.934Z",
+    "end": "2023-02-22T14:02:03.033Z",
+    "duration": 99,
     "testsRegistered": 1,
-    "passPercent": 0,
+    "passPercent": 100,
     "pendingPercent": 0,
     "other": 0,
     "hasOther": false,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "da3dfe0a-d6d8-4651-a74a-f89521272ce6",
+      "uuid": "b4fe32e9-ac3c-4744-abf5-b857b3701091",
       "title": "",
       "fullFile": "C:\\SandBox\\Node\\apiTesting2\\apiTesting1.js",
       "file": "\\apiTesting1.js",
@@ -27,63 +27,40 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "10be95ba-9e03-472c-b257-9981df6ba793",
-          "title": "Data-Driven API Test",
+          "uuid": "8f05cf13-2315-4a55-9d47-65d584d62d17",
+          "title": "POST /api/users",
           "fullFile": "C:\\SandBox\\Node\\apiTesting2\\apiTesting1.js",
           "file": "\\apiTesting1.js",
-          "beforeHooks": [
-            {
-              "title": "\"before all\" hook in \"Data-Driven API Test\"",
-              "fullTitle": "Data-Driven API Test \"before all\" hook in \"Data-Driven API Test\"",
-              "timedOut": false,
-              "duration": 0,
-              "state": null,
-              "speed": null,
-              "pass": false,
-              "fail": false,
-              "pending": false,
-              "context": null,
-              "code": "server = supertest.agent('https://reqres.in');",
-              "err": {},
-              "uuid": "4a483f40-ed23-47f8-ba5d-3117acb3f200",
-              "parentUUID": "10be95ba-9e03-472c-b257-9981df6ba793",
-              "isHook": true,
-              "skipped": false
-            }
-          ],
+          "beforeHooks": [],
           "afterHooks": [],
           "tests": [
             {
-              "title": "should test POST API with multiple data",
-              "fullTitle": "Data-Driven API Test should test POST API with multiple data",
+              "title": "should create a new user with valid data",
+              "fullTitle": "POST /api/users should create a new user with valid data",
               "timedOut": false,
-              "duration": 78,
-              "state": "failed",
-              "speed": null,
-              "pass": false,
-              "fail": true,
+              "duration": 87,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
               "pending": false,
               "context": null,
-              "code": "fs.createReadStream('testData.csv')\n  .pipe(csv())\n  .on('data', function (data) {\n    server\n      .post('/api/users')\n      .send(data)\n      .expect(201)\n      .end(function (err, res) {\n        if (err) {\n          done(err);\n        }\n        assert.equal(res.body.status, 'success');\n      });\n      console.log(res.body); // log response in console\n  })\n  .on('end', function () {\n    done();\n  });",
-              "err": {
-                "message": "ReferenceError: res is not defined",
-                "estack": "ReferenceError: res is not defined\n    at CsvParser.<anonymous> (apiTesting1.js:28:23)\n    at CsvParser.emit (node:events:513:28)\n    at addChunk (node:internal/streams/readable:324:12)\n    at readableAddChunk (node:internal/streams/readable:297:9)\n    at Readable.push (node:internal/streams/readable:234:10)\n    at CsvParser.writeRow (node_modules\\csv-parser\\index.js:192:10)\n    at CsvParser.parseLine (node_modules\\csv-parser\\index.js:166:23)\n    at CsvParser._transform (node_modules\\csv-parser\\index.js:252:16)\n    at Transform._write (node:internal/streams/transform:175:8)\n    at writeOrBuffer (node:internal/streams/writable:392:12)\n    at _write (node:internal/streams/writable:333:10)\n    at Writable.write (node:internal/streams/writable:337:10)\n    at ReadStream.ondata (node:internal/streams/readable:766:22)\n    at ReadStream.emit (node:events:513:28)\n    at addChunk (node:internal/streams/readable:324:12)\n    at readableAddChunk (node:internal/streams/readable:297:9)\n    at Readable.push (node:internal/streams/readable:234:10)\n    at node:internal/fs/streams:275:14\n    at FSReqCallback.wrapper [as oncomplete] (node:fs:681:5)",
-                "diff": null
-              },
-              "uuid": "4db5e283-f17f-42e1-b861-6c1b517e92ff",
-              "parentUUID": "10be95ba-9e03-472c-b257-9981df6ba793",
+              "code": "fs.createReadStream('testData.csv')\n  .pipe(csv())\n  .on('data', (data) => {\n    supertest(apiUrl)\n      .post('/api/users')\n      .send({\n        name: data.name,\n        job: data.job\n      })\n      .expect(201)\n      .end((err, res) => {\n        if (err) return done(err);\n        // assertions for successful response\n        console.log(res.body); // log response in console\n        expect(res.body).to.have.property('id');\n        expect(res.body.name).to.equal(data.name);\n        expect(res.body.email).to.equal(data.email);\n      });\n  })\n  .on('end', () => {\n    done();\n  });",
+              "err": {},
+              "uuid": "8f870ba1-ec16-4434-9c66-f8a204923b22",
+              "parentUUID": "8f05cf13-2315-4a55-9d47-65d584d62d17",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
-          "passes": [],
-          "failures": [
-            "4db5e283-f17f-42e1-b861-6c1b517e92ff"
+          "passes": [
+            "8f870ba1-ec16-4434-9c66-f8a204923b22"
           ],
+          "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 78,
+          "duration": 87,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
