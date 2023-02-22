@@ -1,70 +1,32 @@
-const supertest = require('supertest');
+const request = require('supertest');
 const chai = require('chai');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const dotenv = require('dotenv');
-const mocha = require('mocha');
-const mochawesome = require('mochawesome');
-const fs = require('fs');
-const path = require('path');
-
 const expect = chai.expect;
-const apiUrl = process.env.API_URL;
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
+const csv = require('csv-parser');
+const fs = require('fs');
 
-const csvWriter = createCsvWriter({
-  path: 'output.csv',
-  header: [
-    { id: 'id', title: 'ID' },
-    { id: 'name', title: 'Name' },
-    { id: 'email', title: 'Email' },
-  ]
-});
+const API_URL = 'https://your-api-url.com';
+const CLIENT_ID = 'your-client-id';
+const CLIENT_SECRET = 'your-client-secret';
 
-const outputDir = path.join(__dirname, 'output');
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir);
+function postRequest(data) {
+  return request(API_URL)
+    .post('/your-endpoint')
+    .set('Content-Type', 'application/json')
+    .set('Authorization', `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`)
+    .send(data);
 }
 
-dotenv.config();
-
-describe('POST /api/users', () => {
-  it('should create a new user with valid data', (done) => {
-    const userData = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      password: '123456'
-    };
-    supertest(apiUrl)
-      .post('/api/users')
-      .send(userData)
-      .set('client_id', clientId)
-      .set('client_secret', clientSecret)
-      .expect(201)
-      .end((err, res) => {
-        if (err) {
-          console.log(err);
-          return done(err);
-        }
-        console.log(res.body);
-
-        const records = [
-          {
-            id: res.body.id,
-            name: res.body.name,
-            email: res.body.email
-          }
-        ];
-
-        csvWriter.writeRecords(records)
-          .then(() => {
-            console.log('Data added to CSV file');
-            done();
+describe('Your POST service', function() {
+  fs.createReadStream('data.csv')
+    .pipe(csv())
+    .on('data', function(data) {
+      it(`should return a successful response with data ${JSON.stringify(data)}`, function(done) {
+        postRequest(data)
+          .expect(200)
+          .end(function(err, res) {
+            expect(res.body).to.have.property('status').that.equals('success');
+            done(err);
           });
       });
-  });
+    });
 });
-
-mocha.reporter('mochawesome');
-mocha.addFile(path.join(outputDir, 'mochawesome-report/mochawesome.html'));
-
