@@ -1,6 +1,7 @@
 const supertest = require('supertest');
 const chai = require('chai');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const mochawesome = require('mochawesome');
 
 const expect = chai.expect;
 const apiUrl = 'https://reqres.in'; // replace with your API URL
