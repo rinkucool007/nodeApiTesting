@@ -7,7 +7,8 @@ npx mocha --timeout 10000 .\apiTesting.js
 
 npm install supertest chai csv-parser mocha mochawesome mochawesome-merge mochawesome-report-generator --save-dev
 
-npx mocha .\apiTesting.js --reporter mochawesome
+npx mocha apiTesting1.js --reporter mochawesome
+npx mocha apiTestingReport.js --reporter mochawesome
 
 npx mocha apiTestingEnvReportCSV.js --reporter mochawesome
 

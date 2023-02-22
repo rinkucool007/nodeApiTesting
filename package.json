@@ -18,5 +18,8 @@
     "mochawesome-merge": "^4.2.2",
     "mochawesome-report-generator": "^6.2.0",
     "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "fast-csv": "^4.3.6"
   }
 }
